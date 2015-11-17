@@ -18,14 +18,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef __ESP8266_H__
-#define __ESP8266_H__
+#ifndef __ESP8266AT_H__
+#define __ESP8266AT_H__
 
 #include "Arduino.h"
 
 
 //#define ESP8266_USE_SOFTWARE_SERIAL
-
+#define LOG_OUTPUT_DEBUG            (0)
+#define LOG_OUTPUT_DEBUG_PREFIX     (1)
 
 #ifdef ESP8266_USE_SOFTWARE_SERIAL
 #include "SoftwareSerial.h"
@@ -47,7 +48,7 @@ class ESP8266 {
      *
      * @warning parameter baud depends on the AT firmware. 9600 is an common value. 
      */
-    ESP8266(SoftwareSerial &uart, uint32_t baud = 9600);
+    ESP8266(SoftwareSerial &uart, uint32_t baud = 115200);
 #else /* HardwareSerial */
     /*
      * Constuctor. 
@@ -57,7 +58,7 @@ class ESP8266 {
      *
      * @warning parameter baud depends on the AT firmware. 9600 is an common value. 
      */
-    ESP8266(HardwareSerial &uart, uint32_t baud = 9600);
+    ESP8266(HardwareSerial &uart, uint32_t baud = 115200);
 #endif
     
     
@@ -131,7 +132,20 @@ class ESP8266 {
      * @note This method will take a couple of seconds. 
      */
     bool joinAP(String ssid, String pwd);
+
+    /**
+     * Check if is connected to AP
+     * @see: joinAP
+     */
+    bool connected();
     
+
+    /**
+     * Check if Auto Connection is enabled
+     * @see: joinAP
+     */
+    bool isAutoConnection();
+
     /**
      * Leave AP joined before. 
      *
@@ -174,6 +188,13 @@ class ESP8266 {
      */
     String getLocalIP(void);
     
+    /**
+     * Get the SotAP IP address of ESP8266.
+     *
+     * @return the IP list.
+     */
+    String getSoftAPIP(void);
+
     /**
      * Enable IP MUX(multiple connection mode). 
      *
@@ -383,13 +404,10 @@ class ESP8266 {
      */
     uint32_t recv(uint8_t *coming_mux_id, uint8_t *buffer, uint32_t buffer_size, uint32_t timeout = 1000);
 
- private:
+    void sendAT(const char s[]);
 
-    /* 
-     * Empty the buffer or UART RX.
-     */
-    void rx_empty(void);
- 
+    void printAT(const char s[]);
+
     /* 
      * Recvive data from uart. Return all received data if target found or timeout. 
      */
@@ -405,6 +423,13 @@ class ESP8266 {
      */
     String recvString(String target1, String target2, String target3, uint32_t timeout = 1000);
     
+ private:
+
+    /*
+     * Empty the buffer or UART RX.
+     */
+    void rx_empty(void);
+
     /* 
      * Recvive data from uart and search first target. Return true if target found, false for timeout.
      */
@@ -427,12 +452,12 @@ class ESP8266 {
      */
     uint32_t recvPkg(uint8_t *buffer, uint32_t buffer_size, uint32_t *data_len, uint32_t timeout, uint8_t *coming_mux_id);
     
-    
     bool eAT(void);
     bool eATRST(void);
     bool eATGMR(String &version);
     
     bool qATCWMODE(uint8_t *mode);
+    bool qCWAUTOCONN();
     bool sATCWMODE(uint8_t mode);
     bool sATCWJAP(String ssid, String pwd);
     bool eATCWLAP(String &list);
@@ -447,7 +472,7 @@ class ESP8266 {
     bool sATCIPSENDMultiple(uint8_t mux_id, const uint8_t *buffer, uint32_t len);
     bool sATCIPCLOSEMulitple(uint8_t mux_id);
     bool eATCIPCLOSESingle(void);
-    bool eATCIFSR(String &list);
+    bool eATCIFSR(String &list, uint8_t mode);
     bool sATCIPMUX(uint8_t mode);
     bool sATCIPSERVER(uint8_t mode, uint32_t port = 333);
     bool sATCIPSTO(uint32_t timeout);
@@ -464,5 +489,5 @@ class ESP8266 {
 #endif
 };
 
-#endif /* #ifndef __ESP8266_H__ */
+#endif /* #ifndef __ESP8266AT_H__ */
 

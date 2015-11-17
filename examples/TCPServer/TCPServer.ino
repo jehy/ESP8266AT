@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-#include "ESP8266.h"
+#include "ESP8266AT.h"
 
 #define SSID        "ITEAD"
 #define PASSWORD    "12345678"

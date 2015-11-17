@@ -18,7 +18,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include "ESP8266.h"
+#include "ESP8266AT.h"
 #include <SoftwareSerial.h>
 
 #define SSID        "ITEAD"
