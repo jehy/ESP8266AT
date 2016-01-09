@@ -24,8 +24,8 @@
 #include "Arduino.h"
 
 
-//#define ESP8266_USE_SOFTWARE_SERIAL
-#define LOG_OUTPUT_DEBUG            (0)
+#define ESP8266_USE_SOFTWARE_SERIAL
+#define LOG_OUTPUT_DEBUG            (1)
 #define LOG_OUTPUT_DEBUG_PREFIX     (1)
 
 #ifdef ESP8266_USE_SOFTWARE_SERIAL
@@ -84,6 +84,7 @@ class ESP8266 {
     
     bool getMac(String& mac);
     
+    bool getBaudRate(String& baud);
     
     /**
      * Get the version of AT Command Set. 

@@ -542,6 +542,11 @@ bool ESP8266::getMac(String& mac)
     return recvFindAndFilter("OK", "\r\r\n", "\r\n\r\nOK", mac);
 }
 
+bool ESP8266::getBaudRate(String& baud)
+{
+    sendAT("CIOBAUD?");
+    return recvFindAndFilter("OK", "\r\r\n", "\r\n\r\nOK", baud);
+}
 bool ESP8266::qATCWMODE(uint8_t *mode) 
 {
     String str_mode;
