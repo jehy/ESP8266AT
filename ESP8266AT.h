@@ -82,6 +82,9 @@ class ESP8266 {
      */
     bool restart(void);
     
+    bool getMac(String& mac);
+    
+    
     /**
      * Get the version of AT Command Set. 
      * 

@@ -535,6 +535,13 @@ bool ESP8266::eATGMR(String &version)
     return recvFindAndFilter("OK", "\r\r\n", "\r\n\r\nOK", version);
 }
 
+bool ESP8266::getMac(String& mac)
+{
+    rx_empty();
+    sendAT("CIPAPMAC?");
+    return recvFindAndFilter("OK", "\r\r\n", "\r\n\r\nOK", mac);
+}
+
 bool ESP8266::qATCWMODE(uint8_t *mode) 
 {
     String str_mode;
